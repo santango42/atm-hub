@@ -13,7 +13,7 @@
         extend: {
           fontFamily: { sans: ['Inter', 'sans-serif'] },
           colors: {
-            ore:   { DEFAULT: '#C8860A', light: '#E9A820', dark: '#8B5E07' },
+            ore: { DEFAULT: '#C8860A', light: '#E9A820', dark: '#8B5E07' },
             stone: { 850: '#1C1F2E' },
           },
           animation: {
@@ -25,21 +25,31 @@
   </script>
   <style>
     html { scroll-behavior: smooth; }
-    body { background-color: #0A0E1A; font-family: 'Inter', sans-serif; }
+    body { background-color: #0A0E1A; font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
-    .bg-grid {
-      background-image: linear-gradient(rgba(200,134,10,0.04) 1px,transparent 1px),
-                        linear-gradient(90deg,rgba(200,134,10,0.04) 1px,transparent 1px);
-      background-size: 48px 48px;
+    /* ---- NAV ---- */
+    .nav-blur { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+
+    /* ---- HERO VIDEO ---- */
+    #hero { position: relative; min-height: 100vh; display: flex; align-items: center; overflow: hidden; }
+    #hero-video {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      filter: brightness(0.35) saturate(0.7);
+      z-index: 0;
     }
-
-    .blob {
-      position: absolute;
-      border-radius: 9999px;
-      filter: blur(120px);
-      pointer-events: none;
+    #hero-canvas {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      z-index: 1; pointer-events: none;
     }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(10,14,26,0.2) 0%, rgba(10,14,26,0.0) 40%, rgba(10,14,26,0.7) 100%);
+      z-index: 2;
+    }
+    .hero-content { position: relative; z-index: 3; }
 
+    /* ---- TEXT ---- */
     .text-ore-grad {
       background: linear-gradient(135deg, #E9A820 0%, #C8860A 60%, #f5c842 100%);
       -webkit-background-clip: text;
@@ -47,32 +57,62 @@
       background-clip: text;
     }
 
-    .card-hover {
-      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-    }
+    /* ---- CARDS ---- */
+    .card-hover { transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; }
     .card-hover:hover {
       transform: translateY(-4px);
       box-shadow: 0 0 40px rgba(200,134,10,0.12);
       border-color: rgba(200,134,10,0.35);
     }
 
-    .nav-blur {
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+    /* ---- PARALLAX SECTIONS ---- */
+    .parallax-section {
+      position: relative; overflow: hidden;
     }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.65s ease, transform 0.65s ease;
+    .parallax-bg {
+      position: absolute; inset: -20%; width: 100%; height: 140%;
+      background-size: cover; background-position: center;
+      will-change: transform;
+      filter: brightness(0.18) saturate(0.5);
     }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .parallax-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(10,14,26,0.92) 0%, rgba(10,14,26,0.75) 100%);
+    }
+    .parallax-content { position: relative; z-index: 2; }
 
+    /* ---- TICKER ---- */
     @keyframes ticker { from { transform: translateX(0) } to { transform: translateX(-50%) } }
     .ticker-track { animation: ticker 28s linear infinite; white-space: nowrap; }
+
+    /* ---- REVEAL ---- */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ---- VIDEO GRID ---- */
+    .video-wrapper {
+      position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
+      border-radius: 16px; background: #1C1F2E;
+    }
+    .video-wrapper iframe {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      border: 0; border-radius: 16px;
+    }
+    .video-wrapper video {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      object-fit: cover; border-radius: 16px;
+    }
+
+    /* ---- GRAIN overlay ---- */
+    #hero::after {
+      content: '';
+      position: absolute; inset: 0; z-index: 2;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.35; pointer-events: none;
+    }
   </style>
 </head>
-<body class="text-white antialiased overflow-x-hidden">
+<body class="text-white antialiased">
 
 <!-- NAV -->
 <nav class="fixed top-0 left-0 right-0 z-50 nav-blur bg-[#0A0E1A]/80 border-b border-white/5">
@@ -88,6 +128,7 @@
     <div class="hidden md:flex items-center gap-8 text-sm text-white/50">
       <a href="#que-es"   class="hover:text-white transition-colors">Qué es</a>
       <a href="#miembros" class="hover:text-white transition-colors">Miembros</a>
+      <a href="#videos"   class="hover:text-white transition-colors">Videos</a>
       <a href="#por-que"  class="hover:text-white transition-colors">Por qué sumarse</a>
       <a href="#contacto" class="hover:text-white transition-colors">Contacto</a>
     </div>
@@ -97,12 +138,20 @@
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="relative min-h-screen flex items-center bg-grid pt-16">
-  <div class="blob w-[600px] h-[600px] bg-ore/10 top-[-100px] left-[-200px]"></div>
-  <div class="blob w-[400px] h-[400px] bg-blue-900/20 bottom-[-80px] right-[-100px]"></div>
+<!-- HERO con video de fondo -->
+<section id="hero" class="pt-16">
+  <!-- Video de fondo: operaciones mineras -->
+  <video id="hero-video" autoplay muted loop playsinline
+    poster="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1920&q=80">
+    <source src="https://videos.pexels.com/video-files/3843434/3843434-uhd_2560_1440_25fps.mp4" type="video/mp4" />
+    <source src="https://videos.pexels.com/video-files/2584098/2584098-uhd_2560_1440_30fps.mp4" type="video/mp4" />
+  </video>
 
-  <div class="relative max-w-7xl mx-auto px-6 py-24 lg:py-36 grid lg:grid-cols-2 gap-16 items-center">
+  <!-- Canvas partículas interactivo -->
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content max-w-7xl mx-auto px-6 py-24 lg:py-40 grid lg:grid-cols-2 gap-16 items-center">
     <div>
       <div class="inline-flex items-center gap-2 text-xs font-medium text-ore bg-ore/10 border border-ore/20 px-3 py-1.5 rounded-full mb-8">
         <span class="w-1.5 h-1.5 rounded-full bg-ore animate-pulse-slow inline-block"></span>
@@ -115,7 +164,7 @@
         Mining Hub
       </h1>
 
-      <p class="text-lg text-white/50 leading-relaxed max-w-lg mb-10">
+      <p class="text-lg text-white/60 leading-relaxed max-w-lg mb-10">
         El ecosistema abierto donde empresas tecnológicas y startups que construyen para la cadena minera se encuentran, crecen juntas y avanzan más rápido.
       </p>
 
@@ -124,30 +173,30 @@
           Quiero sumarme
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
-        <a href="#que-es" class="inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white/80 font-medium px-6 py-3 rounded-xl transition-all">
+        <a href="#que-es" class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/15 border border-white/20 text-white/80 font-medium px-6 py-3 rounded-xl transition-all backdrop-blur-sm">
           Conocer más
         </a>
       </div>
     </div>
 
     <div class="grid grid-cols-2 gap-4">
-      <div class="card-hover col-span-2 bg-stone-850/60 border border-white/8 rounded-2xl p-6">
+      <div class="card-hover col-span-2 bg-black/40 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
         <div class="text-4xl font-black text-ore-grad mb-1">+USD 30.000 M</div>
-        <div class="text-sm text-white/40 font-medium">en inversión minera proyectada para Argentina con el nuevo marco regulatorio</div>
+        <div class="text-sm text-white/50 font-medium">en inversión minera proyectada para Argentina con el nuevo marco regulatorio</div>
       </div>
-      <div class="card-hover bg-stone-850/60 border border-white/8 rounded-2xl p-6">
+      <div class="card-hover bg-black/40 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
         <div class="text-3xl font-black text-white mb-1">3.º</div>
         <div class="text-sm text-white/40 font-medium">reserva mundial de litio</div>
       </div>
-      <div class="card-hover bg-stone-850/60 border border-white/8 rounded-2xl p-6">
+      <div class="card-hover bg-black/40 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
         <div class="text-3xl font-black text-white mb-1">+40</div>
         <div class="text-sm text-white/40 font-medium">proyectos activos en distintas provincias</div>
       </div>
-      <div class="card-hover col-span-2 bg-ore/5 border border-ore/20 rounded-2xl p-6 flex items-center gap-4">
+      <div class="card-hover col-span-2 bg-ore/10 backdrop-blur-sm border border-ore/20 rounded-2xl p-6 flex items-center gap-4">
         <div class="w-10 h-10 rounded-xl bg-ore/15 flex items-center justify-center shrink-0">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="#C8860A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
-        <p class="text-sm text-white/60 leading-relaxed">Un nuevo tipo de espacio de industria — no una cámara. Una red viva de builders, operadores e inversores enfocados en la <strong class="text-white/90">transformación tech de la minería.</strong></p>
+        <p class="text-sm text-white/70 leading-relaxed">No una cámara. Una red viva de builders, operadores e inversores enfocados en la <strong class="text-white">transformación tech de la minería.</strong></p>
       </div>
     </div>
   </div>
@@ -177,22 +226,26 @@
   </div>
 </div>
 
-<!-- QUÉ ES -->
-<section id="que-es" class="relative bg-grid py-28">
-  <div class="max-w-7xl mx-auto px-6">
+<!-- QUÉ ES — con parallax imagen minera -->
+<section id="que-es" class="parallax-section py-28">
+  <div class="parallax-bg" id="bg-que-es"
+    style="background-image: url('https://images.unsplash.com/photo-1581093450021-4a7360e9a6b5?w=1920&q=75')">
+  </div>
+  <div class="parallax-overlay"></div>
+  <div class="parallax-content max-w-7xl mx-auto px-6">
     <div class="max-w-2xl mb-16 reveal">
       <div class="text-ore text-sm font-semibold tracking-widest uppercase mb-4">Qué es ATM Hub</div>
       <h2 class="text-4xl lg:text-5xl font-black leading-tight mb-6">
         No es una cámara.<br/>
         <span class="text-ore-grad">Es una red viva.</span>
       </h2>
-      <p class="text-white/50 text-lg leading-relaxed">
+      <p class="text-white/55 text-lg leading-relaxed">
         ATM Hub es el espacio donde empresas tecnológicas —desde grandes corporaciones hasta startups tempranas— se conectan con el ecosistema minero argentino. Existimos para acelerar la adopción de tecnología en toda la cadena de valor minera.
       </p>
     </div>
 
     <div class="grid md:grid-cols-3 gap-6">
-      <div class="reveal card-hover bg-stone-850/60 border border-white/8 rounded-2xl p-8">
+      <div class="reveal card-hover bg-black/50 backdrop-blur-sm border border-white/10 rounded-2xl p-8">
         <div class="w-12 h-12 rounded-xl bg-ore/10 border border-ore/20 flex items-center justify-center mb-6">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#C8860A" stroke-width="2"/><path d="M12 6v6l4 2" stroke="#C8860A" stroke-width="2" stroke-linecap="round"/></svg>
         </div>
@@ -200,7 +253,7 @@
         <p class="text-white/45 text-sm leading-relaxed">Sin llamadas en frío. Presentaciones cálidas y matches entre proveedores tech y operadores mineros listos para arrancar pilotos.</p>
       </div>
 
-      <div class="reveal card-hover bg-stone-850/60 border border-white/8 rounded-2xl p-8" style="transition-delay:0.1s">
+      <div class="reveal card-hover bg-black/50 backdrop-blur-sm border border-white/10 rounded-2xl p-8" style="transition-delay:0.1s">
         <div class="w-12 h-12 rounded-xl bg-ore/10 border border-ore/20 flex items-center justify-center mb-6">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="#C8860A" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#C8860A" stroke-width="2"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="#C8860A" stroke-width="2" stroke-linecap="round"/></svg>
         </div>
@@ -208,7 +261,7 @@
         <p class="text-white/45 text-sm leading-relaxed">Una comunidad de pares que enfrentan los mismos desafíos. Go-to-market conjunto, aprendizajes compartidos, co-desarrollo.</p>
       </div>
 
-      <div class="reveal card-hover bg-stone-850/60 border border-white/8 rounded-2xl p-8" style="transition-delay:0.2s">
+      <div class="reveal card-hover bg-black/50 backdrop-blur-sm border border-white/10 rounded-2xl p-8" style="transition-delay:0.2s">
         <div class="w-12 h-12 rounded-xl bg-ore/10 border border-ore/20 flex items-center justify-center mb-6">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke="#C8860A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
@@ -220,7 +273,7 @@
 </section>
 
 <!-- MIEMBROS -->
-<section id="miembros" class="py-28 bg-stone-850/30">
+<section id="miembros" class="py-28 bg-[#0D111C]">
   <div class="max-w-7xl mx-auto px-6">
     <div class="text-center mb-16 reveal">
       <div class="text-ore text-sm font-semibold tracking-widest uppercase mb-4">Miembros y Socios</div>
@@ -228,7 +281,7 @@
     </div>
 
     <div class="grid md:grid-cols-3 gap-6 mb-16">
-      <div class="reveal card-hover bg-gradient-to-br from-stone-850/80 to-stone-850/40 border border-white/8 rounded-2xl p-8 flex flex-col">
+      <div class="reveal card-hover bg-gradient-to-br from-[#1C1F2E]/80 to-[#1C1F2E]/40 border border-white/8 rounded-2xl p-8 flex flex-col">
         <div class="flex items-center gap-3 mb-5">
           <div class="w-10 h-10 rounded-xl bg-ore/10 border border-ore/20 flex items-center justify-center shrink-0">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="#C8860A" stroke-width="2"/><path d="M9 12h6M12 9v6" stroke="#C8860A" stroke-width="2" stroke-linecap="round"/></svg>
@@ -242,7 +295,7 @@
         <div class="mt-5 pt-5 border-t border-white/5 text-xs text-ore/40 font-medium">Empresarial · Cloud · ERP</div>
       </div>
 
-      <div class="reveal card-hover bg-gradient-to-br from-stone-850/80 to-stone-850/40 border border-white/8 rounded-2xl p-8 flex flex-col" style="transition-delay:0.1s">
+      <div class="reveal card-hover bg-gradient-to-br from-[#1C1F2E]/80 to-[#1C1F2E]/40 border border-white/8 rounded-2xl p-8 flex flex-col" style="transition-delay:0.1s">
         <div class="flex items-center gap-3 mb-5">
           <div class="w-10 h-10 rounded-xl bg-ore/10 border border-ore/20 flex items-center justify-center shrink-0">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="#C8860A" stroke-width="2"/><path d="M9 12h6M12 9v6" stroke="#C8860A" stroke-width="2" stroke-linecap="round"/></svg>
@@ -256,7 +309,7 @@
         <div class="mt-5 pt-5 border-t border-white/5 text-xs text-ore/40 font-medium">IoT · Logística · Monitoreo</div>
       </div>
 
-      <div class="reveal card-hover bg-gradient-to-br from-stone-850/80 to-stone-850/40 border border-white/8 rounded-2xl p-8 flex flex-col" style="transition-delay:0.2s">
+      <div class="reveal card-hover bg-gradient-to-br from-[#1C1F2E]/80 to-[#1C1F2E]/40 border border-white/8 rounded-2xl p-8 flex flex-col" style="transition-delay:0.2s">
         <div class="flex items-center gap-3 mb-5">
           <div class="w-10 h-10 rounded-xl bg-ore/10 border border-ore/20 flex items-center justify-center shrink-0">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="#C8860A" stroke-width="2"/><path d="M9 12h6M12 9v6" stroke="#C8860A" stroke-width="2" stroke-linecap="round"/></svg>
@@ -283,9 +336,82 @@
   </div>
 </section>
 
-<!-- POR QUÉ SUMARSE -->
-<section id="por-que" class="py-28 bg-grid">
-  <div class="max-w-7xl mx-auto px-6">
+<!-- VIDEOS DE MINERÍA -->
+<section id="videos" class="parallax-section py-28">
+  <div class="parallax-bg" id="bg-videos"
+    style="background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&q=75')">
+  </div>
+  <div class="parallax-overlay" style="background: linear-gradient(135deg, rgba(10,14,26,0.95) 0%, rgba(10,14,26,0.85) 100%);"></div>
+  <div class="parallax-content max-w-7xl mx-auto px-6">
+    <div class="text-center mb-14 reveal">
+      <div class="text-ore text-sm font-semibold tracking-widest uppercase mb-4">El sector en movimiento</div>
+      <h2 class="text-4xl lg:text-5xl font-black mb-4">La minería argentina<br/><span class="text-ore-grad">desde adentro</span></h2>
+      <p class="text-white/45 max-w-xl mx-auto">Operaciones reales, tecnología real, en el terreno.</p>
+    </div>
+
+    <!-- Video principal -->
+    <div class="reveal mb-8">
+      <div class="video-wrapper shadow-2xl shadow-black/60" style="border-radius:20px;">
+        <video autoplay muted loop playsinline
+          poster="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1280&q=80"
+          style="border-radius:20px;">
+          <source src="https://videos.pexels.com/video-files/3943947/3943947-uhd_2560_1440_25fps.mp4" type="video/mp4" />
+          <source src="https://videos.pexels.com/video-files/2098851/2098851-uhd_3840_2160_25fps.mp4" type="video/mp4" />
+        </video>
+        <div style="position:absolute;bottom:16px;left:16px;z-index:10;">
+          <span class="bg-black/60 backdrop-blur-sm text-white/70 text-xs px-3 py-1.5 rounded-full border border-white/10">Operaciones mineras · Argentina</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid de videos secundarios -->
+    <div class="grid md:grid-cols-3 gap-5 reveal">
+      <!-- Video 2 -->
+      <div class="video-wrapper shadow-xl shadow-black/50">
+        <video autoplay muted loop playsinline
+          poster="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=640&q=75">
+          <source src="https://videos.pexels.com/video-files/7578547/7578547-hd_1920_1080_25fps.mp4" type="video/mp4" />
+          <source src="https://videos.pexels.com/video-files/3048262/3048262-hd_1920_1080_25fps.mp4" type="video/mp4" />
+        </video>
+        <div style="position:absolute;bottom:10px;left:10px;z-index:10;">
+          <span class="bg-black/60 text-white/60 text-xs px-2 py-1 rounded-full">Maquinaria pesada</span>
+        </div>
+      </div>
+
+      <!-- Video 3 -->
+      <div class="video-wrapper shadow-xl shadow-black/50">
+        <video autoplay muted loop playsinline
+          poster="https://images.unsplash.com/photo-1581093450021-4a7360e9a6b5?w=640&q=75">
+          <source src="https://videos.pexels.com/video-files/4168186/4168186-hd_1920_1080_25fps.mp4" type="video/mp4" />
+          <source src="https://videos.pexels.com/video-files/5379869/5379869-hd_1920_1080_25fps.mp4" type="video/mp4" />
+        </video>
+        <div style="position:absolute;bottom:10px;left:10px;z-index:10;">
+          <span class="bg-black/60 text-white/60 text-xs px-2 py-1 rounded-full">Vista aérea · sitio minero</span>
+        </div>
+      </div>
+
+      <!-- Video 4 -->
+      <div class="video-wrapper shadow-xl shadow-black/50">
+        <video autoplay muted loop playsinline
+          poster="https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=640&q=75">
+          <source src="https://videos.pexels.com/video-files/4067527/4067527-hd_1920_1080_25fps.mp4" type="video/mp4" />
+          <source src="https://videos.pexels.com/video-files/3209828/3209828-hd_1920_1080_25fps.mp4" type="video/mp4" />
+        </video>
+        <div style="position:absolute;bottom:10px;left:10px;z-index:10;">
+          <span class="bg-black/60 text-white/60 text-xs px-2 py-1 rounded-full">Procesamiento industrial</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POR QUÉ SUMARSE — parallax imagen litio/minería -->
+<section id="por-que" class="parallax-section py-28">
+  <div class="parallax-bg" id="bg-porque"
+    style="background-image: url('https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=1920&q=75')">
+  </div>
+  <div class="parallax-overlay"></div>
+  <div class="parallax-content max-w-7xl mx-auto px-6">
     <div class="max-w-xl mb-16 reveal">
       <div class="text-ore text-sm font-semibold tracking-widest uppercase mb-4">Por qué sumarse</div>
       <h2 class="text-4xl lg:text-5xl font-black leading-tight">
@@ -334,32 +460,32 @@
       </div>
 
       <div class="reveal grid grid-cols-2 gap-4" style="transition-delay:0.1s">
-        <div class="card-hover bg-stone-850/60 border border-white/8 rounded-xl p-5">
+        <div class="card-hover bg-black/50 backdrop-blur-sm border border-white/10 rounded-xl p-5">
           <div class="text-ore mb-2">⚡</div>
           <div class="font-semibold text-sm mb-1">Energía y Electrificación</div>
           <div class="text-xs text-white/35">Microrredes, solar, BESS para sitios remotos</div>
         </div>
-        <div class="card-hover bg-stone-850/60 border border-white/8 rounded-xl p-5">
+        <div class="card-hover bg-black/50 backdrop-blur-sm border border-white/10 rounded-xl p-5">
           <div class="text-ore mb-2">🤖</div>
           <div class="font-semibold text-sm mb-1">Automatización y Robótica</div>
           <div class="text-xs text-white/35">Vehículos autónomos, drones, inspección</div>
         </div>
-        <div class="card-hover bg-stone-850/60 border border-white/8 rounded-xl p-5">
+        <div class="card-hover bg-black/50 backdrop-blur-sm border border-white/10 rounded-xl p-5">
           <div class="text-ore mb-2">📡</div>
           <div class="font-semibold text-sm mb-1">Conectividad e IoT</div>
           <div class="text-xs text-white/35">LTE/5G, satelital, redes de sensores</div>
         </div>
-        <div class="card-hover bg-stone-850/60 border border-white/8 rounded-xl p-5">
+        <div class="card-hover bg-black/50 backdrop-blur-sm border border-white/10 rounded-xl p-5">
           <div class="text-ore mb-2">🧠</div>
           <div class="font-semibold text-sm mb-1">IA y Datos</div>
           <div class="text-xs text-white/35">Mantenimiento predictivo, geo-IA, planificación</div>
         </div>
-        <div class="card-hover bg-stone-850/60 border border-white/8 rounded-xl p-5">
+        <div class="card-hover bg-black/50 backdrop-blur-sm border border-white/10 rounded-xl p-5">
           <div class="text-ore mb-2">🌿</div>
           <div class="font-semibold text-sm mb-1">ESG y Compliance</div>
           <div class="text-xs text-white/35">Huella de carbono, agua, licencia social</div>
         </div>
-        <div class="card-hover bg-stone-850/60 border border-white/8 rounded-xl p-5">
+        <div class="card-hover bg-black/50 backdrop-blur-sm border border-white/10 rounded-xl p-5">
           <div class="text-ore mb-2">🏗</div>
           <div class="font-semibold text-sm mb-1">Cadena de Suministro</div>
           <div class="text-xs text-white/35">Compras, trazabilidad, logística</div>
@@ -370,7 +496,7 @@
 </section>
 
 <!-- CONTACTO -->
-<section id="contacto" class="py-28 bg-stone-850/30">
+<section id="contacto" class="py-28 bg-[#0D111C]">
   <div class="max-w-2xl mx-auto px-6 text-center reveal">
     <div class="text-ore text-sm font-semibold tracking-widest uppercase mb-4">Sumate al Hub</div>
     <h2 class="text-4xl lg:text-5xl font-black mb-6">¿Querés ser parte<br/>de esto?</h2>
@@ -412,7 +538,7 @@
 </section>
 
 <!-- FOOTER -->
-<footer class="border-t border-white/5 py-10">
+<footer class="border-t border-white/5 py-10 bg-[#0A0E1A]">
   <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-white/25">
     <div class="flex items-center gap-3">
       <div class="w-6 h-6 rounded bg-ore/10 border border-ore/20 flex items-center justify-center">
@@ -430,16 +556,115 @@
 </footer>
 
 <script>
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+// =============================================
+// PARTÍCULAS INTERACTIVAS — HERO
+// =============================================
+const canvas = document.getElementById('hero-canvas');
+const ctx = canvas.getContext('2d');
+let mouse = { x: -9999, y: -9999 };
+let particles = [];
+const N = 80;
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    document.getElementById('joinForm').style.display = 'none';
-    document.getElementById('successMsg').classList.remove('hidden');
+function resize() {
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x  = Math.random() * canvas.width;
+    this.y  = Math.random() * canvas.height;
+    this.vx = (Math.random() - 0.5) * 0.4;
+    this.vy = (Math.random() - 0.5) * 0.4;
+    this.r  = Math.random() * 1.8 + 0.4;
+    this.alpha = Math.random() * 0.5 + 0.1;
   }
+  update() {
+    const dx = mouse.x - this.x;
+    const dy = mouse.y - this.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < 120) {
+      const force = (120 - dist) / 120;
+      this.vx -= (dx / dist) * force * 0.6;
+      this.vy -= (dy / dist) * force * 0.6;
+    }
+    this.vx *= 0.97;
+    this.vy *= 0.97;
+    this.x += this.vx;
+    this.y += this.vy;
+    if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(200,134,10,${this.alpha})`;
+    ctx.fill();
+  }
+}
+
+for (let i = 0; i < N; i++) particles.push(new Particle());
+
+function drawLines() {
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const d  = Math.sqrt(dx * dx + dy * dy);
+      if (d < 110) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(200,134,10,${0.12 * (1 - d / 110)})`;
+        ctx.lineWidth = 0.6;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  drawLines();
+  requestAnimationFrame(animate);
+}
+animate();
+
+// =============================================
+// PARALLAX SCROLL
+// =============================================
+const parallaxBgs = document.querySelectorAll('.parallax-bg');
+function onScroll() {
+  parallaxBgs.forEach(bg => {
+    const rect = bg.parentElement.getBoundingClientRect();
+    const ratio = -rect.top / (window.innerHeight + rect.height);
+    bg.style.transform = `translateY(${ratio * 60}px)`;
+  });
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+// =============================================
+// REVEAL ON SCROLL
+// =============================================
+const observer = new IntersectionObserver(
+  entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+  { threshold: 0.1 }
+);
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// =============================================
+// FORM SUBMIT
+// =============================================
+function handleSubmit(e) {
+  e.preventDefault();
+  document.getElementById('joinForm').style.display = 'none';
+  document.getElementById('successMsg').classList.remove('hidden');
+}
 </script>
 </body>
 </html>
