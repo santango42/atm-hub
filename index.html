@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HTM · Hub Tecnológico Minero</title>
+  <title>HTM · Hub Tecnológico Minero para Argentina</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --ore: #C8860A;
-      --ore-light: #E9A820;
+      --ore: #74ACDF;
+      --ore-light: #A0C8ED;
       --bg: #0B0D14;
-      --bg2: #111420;
+      --bg2: #0E1220;
       --line: rgba(255,255,255,0.07);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -46,12 +46,12 @@
       border-bottom: 1px solid var(--line);
     }
     .nav-logo { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; color: rgba(255,255,255,0.85); }
-    .nav-logo-mark { width: 28px; height: 28px; border: 1px solid rgba(200,134,10,0.4); border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+    .nav-logo-mark { width: 28px; height: 28px; border: 1px solid rgba(116,172,223,0.4); border-radius: 6px; display: flex; align-items: center; justify-content: center; }
     .nav-links { display: flex; gap: 36px; font-size: 13px; color: rgba(255,255,255,0.4); }
     .nav-links a:hover { color: #fff; }
     .nav-cta {
       font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
-      color: var(--ore); border: 1px solid rgba(200,134,10,0.35);
+      color: var(--ore); border: 1px solid rgba(116,172,223,0.35);
       padding: 8px 20px; border-radius: 4px;
       transition: background 0.2s, color 0.2s;
     }
@@ -92,9 +92,9 @@
     .hero-stat-label { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.5; max-width: 180px; }
 
     /* ─── TICKER ─── */
-    .ticker-wrap { background: rgba(200,134,10,0.06); border-top: 1px solid rgba(200,134,10,0.12); border-bottom: 1px solid rgba(200,134,10,0.12); padding: 10px 0; overflow: hidden; }
+    .ticker-wrap { background: rgba(116,172,223,0.06); border-top: 1px solid rgba(116,172,223,0.12); border-bottom: 1px solid rgba(116,172,223,0.12); padding: 10px 0; overflow: hidden; }
     @keyframes tick { from { transform: translateX(0) } to { transform: translateX(-50%) } }
-    .ticker-inner { animation: tick 30s linear infinite; display: flex; gap: 48px; white-space: nowrap; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(200,134,10,0.5); }
+    .ticker-inner { animation: tick 30s linear infinite; display: flex; gap: 48px; white-space: nowrap; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(116,172,223,0.5); }
 
     /* ─── SECTIONS ─── */
     section { padding: 120px 48px; max-width: 1400px; margin: 0 auto; }
@@ -177,7 +177,7 @@
       padding: 12px 16px; border-radius: 4px; outline: none;
       transition: border-color 0.2s;
     }
-    .form-input:focus { border-color: rgba(200,134,10,0.4); }
+    .form-input:focus { border-color: rgba(116,172,223,0.4); }
     .form-input::placeholder { color: rgba(255,255,255,0.2); }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .form-submit {
@@ -238,8 +238,8 @@
     .chain-node:hover .chain-node-inner,
     .chain-node.active .chain-node-inner {
       border-color: var(--ore);
-      background: rgba(200,134,10,0.08);
-      box-shadow: 0 0 28px rgba(200,134,10,0.25);
+      background: rgba(116,172,223,0.08);
+      box-shadow: 0 0 28px rgba(116,172,223,0.25);
     }
     .chain-node-icon { color: rgba(255,255,255,0.35); transition: color 0.25s; }
     .chain-node:hover .chain-node-icon,
@@ -255,13 +255,13 @@
 
     /* connector arrow */
     .chain-connector { display: flex; align-items: center; padding-top: 30px; /* vertically center with circle */ }
-    .chain-connector-line { width: 40px; height: 1px; background: linear-gradient(to right, rgba(200,134,10,0.25), rgba(200,134,10,0.08)); }
-    .chain-connector-arrow { color: rgba(200,134,10,0.25); font-size: 10px; margin-left: -2px; }
+    .chain-connector-line { width: 40px; height: 1px; background: linear-gradient(to right, rgba(116,172,223,0.25), rgba(116,172,223,0.08)); }
+    .chain-connector-arrow { color: rgba(116,172,223,0.25); font-size: 10px; margin-left: -2px; }
 
     /* tooltip panel */
     .chain-tooltip {
       position: absolute; bottom: calc(100% + 20px); left: 50%; transform: translateX(-50%);
-      width: 260px; background: #0f1220; border: 1px solid rgba(200,134,10,0.2);
+      width: 260px; background: #0f1220; border: 1px solid rgba(116,172,223,0.2);
       border-radius: 8px; padding: 20px;
       opacity: 0; pointer-events: none;
       transition: opacity 0.2s, transform 0.2s;
@@ -277,7 +277,7 @@
     /* arrow below tooltip */
     .chain-tooltip::after {
       content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
-      border: 6px solid transparent; border-top-color: rgba(200,134,10,0.2);
+      border: 6px solid transparent; border-top-color: rgba(116,172,223,0.2);
     }
     .chain-tooltip-title { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ore); margin-bottom: 4px; }
     .chain-tooltip-desc { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.6; margin-bottom: 16px; border-bottom: 1px solid var(--line); padding-bottom: 14px; }
@@ -288,7 +288,7 @@
     .chain-company-link { font-size: 10px; color: var(--ore); letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; }
     .chain-company-link:hover { text-decoration: underline; }
     .chain-empty { font-size: 12px; color: rgba(255,255,255,0.25); font-style: italic; text-align: center; padding: 8px 0 4px; }
-    .chain-tooltip-cta { display: block; margin-top: 14px; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(200,134,10,0.6); text-align: center; transition: color 0.2s; }
+    .chain-tooltip-cta { display: block; margin-top: 14px; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(116,172,223,0.6); text-align: center; transition: color 0.2s; }
     .chain-tooltip-cta:hover { color: var(--ore); }
 
     @media (max-width: 900px) {
@@ -317,7 +317,7 @@
   <div class="nav-logo">
     <!-- Guanaco — logo provisorio argentino -->
     <svg width="36" height="36" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g fill="#C8860A">
+      <g fill="#74ACDF">
         <!-- cuerpo -->
         <ellipse cx="58" cy="74" rx="26" ry="18"/>
         <!-- cuello -->
@@ -372,12 +372,13 @@
       <span class="label">Argentina · Minería · Tecnología</span>
     </div>
 
-    <div style="font-size:13px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(200,134,10,0.7);margin-bottom:16px;">HTM</div>
+    <div style="font-size:13px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(116,172,223,0.7);margin-bottom:16px;">HTM</div>
     <h1 class="display">
       Hub<br/>
       Tecnológico<br/>
       <em>Minero</em>
     </h1>
+    <div style="margin-top:20px; font-family:'DM Serif Display',serif; font-size:clamp(22px,3.5vw,48px); font-style:italic; color:rgba(116,172,223,0.75); letter-spacing:-0.01em;">para Argentina</div>
 
     <div class="hero-stats">
       <div class="hero-stat">
@@ -653,7 +654,7 @@
         <button type="submit" class="form-submit">Enviar postulación</button>
       </form>
 
-      <div id="successMsg" style="display:none; margin-top:32px; padding:32px; border:1px solid rgba(200,134,10,0.2); border-radius:4px; background:rgba(200,134,10,0.05);">
+      <div id="successMsg" style="display:none; margin-top:32px; padding:32px; border:1px solid rgba(116,172,223,0.2); border-radius:4px; background:rgba(116,172,223,0.05);">
         <div style="font-size:13px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--ore); margin-bottom:8px;">Postulación recibida</div>
         <div style="font-size:14px; color:rgba(255,255,255,0.5);">La vamos a revisar y te contactamos pronto.</div>
       </div>
@@ -664,8 +665,8 @@
 <!-- FOOTER -->
 <footer>
   <div style="display:flex; align-items:center; gap:10px;">
-    <svg width="24" height="24" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg"><g fill="#C8860A" opacity="0.6"><ellipse cx="58" cy="74" rx="26" ry="18"/><rect x="68" y="44" width="13" height="32" rx="6"/><ellipse cx="77" cy="38" rx="10" ry="8"/><ellipse cx="85" cy="40" rx="5" ry="4"/><ellipse cx="71" cy="31" rx="3" ry="6" transform="rotate(-15 71 31)"/><ellipse cx="80" cy="30" rx="3" ry="6" transform="rotate(10 80 30)"/><ellipse cx="33" cy="68" rx="5" ry="9" transform="rotate(20 33 68)"/><rect x="50" y="88" width="8" height="20" rx="4"/><rect x="62" y="88" width="8" height="20" rx="4"/><rect x="36" y="86" width="8" height="22" rx="4"/><rect x="47" y="87" width="8" height="21" rx="4"/><ellipse cx="58" cy="109" rx="32" ry="3"/></g></svg>
-    Hub Tecnológico Minero
+    <svg width="24" height="24" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg"><g fill="#74ACDF" opacity="0.6"><ellipse cx="58" cy="74" rx="26" ry="18"/><rect x="68" y="44" width="13" height="32" rx="6"/><ellipse cx="77" cy="38" rx="10" ry="8"/><ellipse cx="85" cy="40" rx="5" ry="4"/><ellipse cx="71" cy="31" rx="3" ry="6" transform="rotate(-15 71 31)"/><ellipse cx="80" cy="30" rx="3" ry="6" transform="rotate(10 80 30)"/><ellipse cx="33" cy="68" rx="5" ry="9" transform="rotate(20 33 68)"/><rect x="50" y="88" width="8" height="20" rx="4"/><rect x="62" y="88" width="8" height="20" rx="4"/><rect x="36" y="86" width="8" height="22" rx="4"/><rect x="47" y="87" width="8" height="21" rx="4"/><ellipse cx="58" cy="109" rx="32" ry="3"/></g></svg>
+    Hub Tecnológico Minero para Argentina
   </div>
   <span>© 2025 HTM · Buenos Aires</span>
   <div style="display:flex; gap:28px;">
@@ -707,7 +708,7 @@ class Particle {
   }
   draw() {
     ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
-    ctx.fillStyle = `rgba(200,134,10,${this.alpha})`; ctx.fill();
+    ctx.fillStyle = `rgba(116,172,223,${this.alpha})`; ctx.fill();
   }
 }
 for (let i = 0; i < 70; i++) particles.push(new Particle());
@@ -718,7 +719,7 @@ function loop() {
     for (let j = i+1; j < particles.length; j++) {
       const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y;
       const d = Math.sqrt(dx*dx+dy*dy);
-      if (d < 100) { ctx.beginPath(); ctx.moveTo(particles[i].x,particles[i].y); ctx.lineTo(particles[j].x,particles[j].y); ctx.strokeStyle=`rgba(200,134,10,${0.1*(1-d/100)})`; ctx.lineWidth=0.5; ctx.stroke(); }
+      if (d < 100) { ctx.beginPath(); ctx.moveTo(particles[i].x,particles[i].y); ctx.lineTo(particles[j].x,particles[j].y); ctx.strokeStyle=`rgba(116,172,223,${0.1*(1-d/100)})`; ctx.lineWidth=0.5; ctx.stroke(); }
     }
   }
   requestAnimationFrame(loop);
